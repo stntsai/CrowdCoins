@@ -1,11 +1,14 @@
 import React,{Component} from "react";
 import Layout from "../../../components/Layout";
-import { Button, Table } from 'semantic-ui-react';
+import { Button, Table, Message } from 'semantic-ui-react';
 import { Link } from '../../../routes';
 import Campaign from '../../../ethereum/campaign';
 import RequestRow from "../../../components/RequestRow";
 
 class RequestIndex extends Component{
+    state={
+        errorMessage:''
+    }
 
     static async getInitialProps(props){
         const { address } = await props.query;
@@ -63,6 +66,7 @@ class RequestIndex extends Component{
                     </Header>
                     <Body>{this.renderRow()}</Body>
                 </Table>
+                <div> Found {this.props.requestCount} requests.</div>
             </Layout>
         )
     }
