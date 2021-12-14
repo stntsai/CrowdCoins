@@ -12,7 +12,8 @@ class RequestNew extends Component{
         description: '',
         recipient: '',
         errorMessage: '',
-        loading: false
+        loading: false,
+        instructionWhileWait: ''
     }
 
     static async getInitialProps(props){
@@ -25,7 +26,7 @@ class RequestNew extends Component{
         const campaign = Campaign(this.props.address);
         const { description, value, recipient } = this.state;
 
-        this.setState({ loading: true, errorMessage: ''});
+        this.setState({ loading: true, errorMessage: '', instructionWhileWait:'Please wait for creation (up to 30secs)...'});
 
         try{
             const accounts = await web3.eth.getAccounts();
@@ -37,16 +38,14 @@ class RequestNew extends Component{
         }catch (err){
             this.setState({errorMessage: err.message});
         }
-        this.setState({ loading: false});
+        this.setState({ loading: false, instructionWhileWait:'' });
     }
     
     render(){
         return (
             
             <Layout>
-                <Link route={`/campaigns/${this.props.address}/requests`}>
-                    <a>Back</a>
-                </Link>
+                
                 <h3>Create a Request</h3>
                 <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
                     <Form.Field>
@@ -81,6 +80,10 @@ class RequestNew extends Component{
                     
                     <Message error header='Oops!' content={ this.state.errorMessage }/>
                     <Button primary loading={ this.state.loading }>Create</Button>
+                    <Link route={`/campaigns/${this.props.address}/requests`}>
+                        <a>    Go Back</a>
+                    </Link>
+                    <p>{this.state.instructionWhileWait}</p>
                 </Form>
             </Layout>
         )

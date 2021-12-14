@@ -90,6 +90,9 @@ class CampaignShow extends Component{
                                     <Button primary> View Requests </Button>
                                 </a>
                             </Link>
+                            <Link route={`/`}>
+                                <a>    Go Back</a>
+                            </Link>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>

@@ -3,19 +3,20 @@ import { Button, Form, Input, Message } from "semantic-ui-react";
 import Layout from "../../components/Layout";
 import factory from '../../ethereum/factory';
 import web3 from "../../ethereum/web3";
-import { Router } from '../../routes';
+import { Link, Router } from '../../routes';
 
 class newCampaign extends Component{
     state = {
         minimumContribution: '',
         errorMessage: '',
+        instructionWhileWait: '',
         loading: false
     };
 
     onSubmit = async (event)=>{
         event.preventDefault();
 
-        this.setState({loading: true, errorMessage: ''});
+        this.setState({loading: true, instructionWhileWait: 'Please wait for creation(up to 30 secs)..',errorMessage: ''});
 
         try{
             const accounts = await web3.eth.getAccounts()
@@ -27,7 +28,7 @@ class newCampaign extends Component{
             this.setState({errorMessage: err.message});
         }
 
-        this.setState({loading: false});
+        this.setState({loading: false, instructionWhileWait:''});
         
     };
 
@@ -35,6 +36,7 @@ class newCampaign extends Component{
         return (
             <Layout>
                 <h1>New Campaign</h1>
+                
                 <Form onSubmit={this.onSubmit} error={!!this.state.errorMessage}>
                     <Form.Field>
                         <label>Minimum Contribution</label>
@@ -48,6 +50,10 @@ class newCampaign extends Component{
 
                     <Message error header='Oops!' content={this.state.errorMessage} />
                     <Button loading={this.state.loading} primary>Create</Button>
+                    <Link route={`/`}>
+                        <a>    Go Back</a>
+                    </Link>
+                    <p>{this.state.instructionWhileWait}</p>
                 </Form>
                 
             </Layout>

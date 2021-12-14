@@ -9,7 +9,8 @@ class ContributionForm extends Component{
     state ={
         loading: false,
         value: '',
-        errorMessage: ''
+        errorMessage: '',
+        instructionWhileWait: ''
     }
 
     onSubmit = async (event) => {
@@ -17,7 +18,7 @@ class ContributionForm extends Component{
 
         const campaign = Campaign(this.props.address)
 
-        this.setState({ loading: true, errorMessage:''})
+        this.setState({ loading: true, errorMessage:'', instructionWhileWait:'Please wait for your registration (up to 30 secs)...'})
         try {
             const accounts = await web3.eth.getAccounts();
             await campaign.methods.contribute().send({
@@ -31,7 +32,8 @@ class ContributionForm extends Component{
         }
         this.setState({
             loading: false,
-            value : ''
+            value : '',
+            instructionWhileWait: ''
         })
 
     }
@@ -50,6 +52,7 @@ class ContributionForm extends Component{
                 </Form.Field>
                 <Message error header='Oops!' content={this.state.errorMessage}/>
                 <Button primary loading={this.state.loading}>Contribute!</Button>
+                <p>{this.state.instructionWhileWait}</p>
                 
             </Form>
         )
